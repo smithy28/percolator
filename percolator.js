@@ -2,6 +2,7 @@ var p;
 var density = 0.1;
 var type = 1; //'Squares or diamonds - it will alternate between them at the moment
 var rate = 50; //Number of squares to draw for each animation frame
+var loop = true;
 
 //Get jQuery
 
@@ -47,7 +48,7 @@ getScript('http://code.jquery.com/jquery-1.10.2.min.js',function() {
       this.initialize = function(){
         //Initialize the s, the initial condition
         t.s = [];
-        type = (type+1)%2;
+        //type = (type+1)%2;
         for(var ii=0;ii<nx;ii++){
           t.s[ii] = [];
           for(var jj=0;jj<ny;jj++){
@@ -74,7 +75,7 @@ getScript('http://code.jquery.com/jquery-1.10.2.min.js',function() {
 
       var updaterule = [function(ii,jj){
         var change = false;
-        if (np(ii,jj) == 0){
+        if (np(ii,jj) === 0){
           change = np(ii-1,jj-1) & np(ii-1,jj) & np(ii-1,jj+1);
           change = change |  np(ii+1,jj-1) & np(ii+1,jj) & np(ii+1,jj+1);
           change = change |  np(ii-1,jj-1) & np(ii,jj-1) & np(ii+1,jj-1);
@@ -84,11 +85,21 @@ getScript('http://code.jquery.com/jquery-1.10.2.min.js',function() {
       },
           function(ii,jj){
             var change = false;
-            if (np(ii,jj) == 0){
+            if (np(ii,jj) === 0){
               change = np(ii,jj-1) & np(ii+1,jj);
               change = change | np(ii+1,jj) & np(ii,jj+1);
               change = change | np(ii,jj+1) & np(ii-1,jj);
               change = change | np(ii-1,jj) & np(ii,jj-1);
+            }
+            return change;
+          },
+          function(ii,jj){
+            var change = false;
+            if(np(ii,jj)===0){
+            change = (np(ii,jj+1) + np(ii+1,jj) + np(ii-1,jj-1)) >=2;
+            change = change | (np(ii,jj+1) + np(ii-1,jj) + np(ii+1,jj-1)) >= 2;
+            change = change | (np(ii-1,jj) + np(ii,jj-1) + np(ii+1,jj+1)) >= 2;
+            change = change | (np(ii-1,jj+1) + np(ii+1,jj)) + np(ii,jj-1) >= 2;
             }
             return change;
           }
@@ -137,8 +148,10 @@ getScript('http://code.jquery.com/jquery-1.10.2.min.js',function() {
           requestAnimationFrame(raf);
 
         } else {
+          if (loop){
           t.initialize();
           t.update();
+          }
         }
 
       };
@@ -212,7 +225,11 @@ $(function(){
   if(urlobj.rate){
     rate = urlobj.rate;
   }
+  if(urlobj.loop){
+    loop = Boolean(urlobj.loop);
+  }
 
+  //Sort out the DOM so other things aren't borked
   var $bg = $('.bg');
   var w = $bg.width();
   var h = $bg.height();
@@ -223,7 +240,7 @@ $(function(){
   $bg.append($canv_wrap);
 
   p = new percolator(density,$canv,type,rate);
-  p.update();
+  p.update(loop);
 });
 
 });
