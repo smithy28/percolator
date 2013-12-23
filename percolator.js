@@ -76,10 +76,10 @@ getScript('http://code.jquery.com/jquery-1.10.2.min.js',function() {
       var updaterule = [function(ii,jj){
         var change = false;
         if (np(ii,jj) === 0){
-          change = np(ii-1,jj-1) & np(ii-1,jj) & np(ii-1,jj+1);
-          change = change |  np(ii+1,jj-1) & np(ii+1,jj) & np(ii+1,jj+1);
-          change = change |  np(ii-1,jj-1) & np(ii,jj-1) & np(ii+1,jj-1);
-          change = change |  np(ii-1,jj+1) & np(ii,jj+1) & np(ii+1,jj+1);
+          change = np(ii-1,jj-2) & np(ii-1,jj-1) & np(ii-1,jj) & np(ii-1,jj+1) & np(ii-1,jj+2);
+          change = change |  np(ii+1,jj-2) & np(ii+1,jj-1) & np(ii+1,jj) & np(ii+1,jj+1) & np(ii+1,jj+2);
+          change = change |  np(ii-1,jj-1) & np(ii-1,jj-1) & np(ii,jj-1) & np(ii+1,jj-1) & np(ii-1,jj-1);
+          change = change |  np(ii-2,jj+1) & np(ii-1,jj+1) & np(ii,jj+1) & np(ii+1,jj+1) & np(ii+2,jj+1);
         }
         return change;
       },
@@ -97,9 +97,9 @@ getScript('http://code.jquery.com/jquery-1.10.2.min.js',function() {
             var change = false;
             if(np(ii,jj)===0){
             change = (np(ii,jj+1) + np(ii+1,jj) + np(ii-1,jj-1)) >=2;
-            change = change | (np(ii,jj+1) + np(ii-1,jj) + np(ii+1,jj-1)) >= 2;
-            change = change | (np(ii-1,jj) + np(ii,jj-1) + np(ii+1,jj+1)) >= 2;
-            change = change | (np(ii-1,jj+1) + np(ii+1,jj)) + np(ii,jj-1) >= 2;
+            //change = change | (np(ii,jj+1) + np(ii-1,jj) + np(ii+1,jj-1)) >= 2;
+            //change = change | (np(ii-1,jj) + np(ii,jj-1) + np(ii+1,jj+1)) >= 2;
+            //change = change | (np(ii-1,jj+1) + np(ii+1,jj)) + np(ii,jj-1) >= 2;
             }
             return change;
           }
