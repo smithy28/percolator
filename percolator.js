@@ -1,7 +1,7 @@
 var p;
-var density = 0.1;
-var type = 1; //'Squares or diamonds - it will alternate between them at the moment
-var rate = 50; //Number of squares to draw for each animation frame
+var density = 0.05;
+var type = 2; //'Squares or diamonds - it will alternate between them at the moment
+var rate = 5; //Number of squares to draw for each animation frame
 var loop = true;
 
 //Get jQuery
@@ -226,7 +226,7 @@ $(function(){
     rate = urlobj.rate;
   }
   if(urlobj.loop){
-    loop = Boolean(urlobj.loop);
+    loop = urlobj.loop ==='true' ;
   }
 
   //Sort out the DOM so other things aren't borked
@@ -234,10 +234,11 @@ $(function(){
   var w = $bg.width();
   var h = $bg.height();
   $bg.css({'background-image':'none'});
+  $bg.children().css({'position':'relative'});
   var $canv_wrap = $('<div>').attr('id','canv_wrap').css({position:'absolute',float:'left'});
   var $canv = $('<canvas>').attr('id','canvas').attr('width',w).attr('height',h);
   $canv_wrap.append($canv);
-  $bg.append($canv_wrap);
+  $bg.prepend($canv_wrap);
 
   p = new percolator(density,$canv,type,rate);
   p.update(loop);
